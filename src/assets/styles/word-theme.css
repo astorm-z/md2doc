@@ -15,7 +15,7 @@
 
 /* 段落样式 */
 .word-document p {
-  text-indent: 2em;
+  text-indent: 0;
   margin: 0 0 12pt 0;
   text-align: justify;
   line-height: 1.5;
@@ -76,6 +76,7 @@
   border-collapse: collapse;
   width: 100%;
   margin: 12pt 0;
+  table-layout: auto;
 }
 
 .word-document table th {
@@ -84,12 +85,15 @@
   text-align: left;
   font-weight: bold;
   background-color: #f0f0f0;
+  white-space: nowrap;
+  min-width: 80pt;
 }
 
 .word-document table td {
   border: 1pt solid #000;
   padding: 6pt 12pt;
   text-align: left;
+  min-width: 80pt;
 }
 
 /* 代码块样式 */

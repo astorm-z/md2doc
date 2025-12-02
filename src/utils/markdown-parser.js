@@ -28,7 +28,7 @@ const defaultParagraphOpen = md.renderer.rules.paragraph_open || function(tokens
 };
 
 md.renderer.rules.paragraph_open = function(tokens, idx, options, env, self) {
-  tokens[idx].attrSet('style', 'text-indent: 2em; line-height: 1.5; margin: 0 0 12pt 0; text-align: justify;');
+  tokens[idx].attrSet('style', 'text-indent: 0; line-height: 1.5; margin: 0 0 12pt 0; text-align: justify;');
   return defaultParagraphOpen(tokens, idx, options, env, self);
 };
 
