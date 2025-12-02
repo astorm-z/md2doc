@@ -5,8 +5,9 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
+    host: '0.0.0.0', // 监听所有网络接口
     port: 3000,
-    open: true
+    open: false // 服务器环境不需要自动打开浏览器
   },
   build: {
     outDir: 'dist',
