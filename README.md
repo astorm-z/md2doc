@@ -47,7 +47,7 @@ npm install
 npm run dev
 ```
 
-访问 http://localhost:3000 即可使用。
+访问 http://localhost:3001 即可使用。
 
 ### 构建生产版本
 
