@@ -1,0 +1,83 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: white;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #212529;
+  margin: 0;
+}
+
+.copyButton {
+  padding: 8px 20px;
+  background: #0d6efd;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.copyButton:hover:not(:disabled) {
+  background: #0b5ed7;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(13, 110, 253, 0.3);
+}
+
+.copyButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.copyButton:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.copyButton.success {
+  background: #198754;
+}
+
+.copyButton.success:hover {
+  background: #157347;
+}
+
+.copyButton.error {
+  background: #dc3545;
+}
+
+.copyButton.error:hover {
+  background: #bb2d3b;
+}
+
+.previewWrapper {
+  flex: 1;
+  overflow: auto;
+  background: #e9ecef;
+  padding: 20px;
+}
+
+/* 空状态提示 */
+.previewWrapper:empty::before {
+  content: '在左侧输入 Markdown 文本，这里将实时显示预览效果';
+  display: block;
+  text-align: center;
+  color: #adb5bd;
+  padding: 40px 20px;
+  font-size: 14px;
+}
