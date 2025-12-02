@@ -37,31 +37,31 @@
 
 ### 安装依赖
 
-\`\`\`bash
+```bash
 npm install
-\`\`\`
+```
 
 ### 开发模式
 
-\`\`\`bash
+```bash
 npm run dev
-\`\`\`
+```
 
 访问 http://localhost:3000 即可使用。
 
 ### 构建生产版本
 
-\`\`\`bash
+```bash
 npm run build
-\`\`\`
+```
 
 构建产物将输出到 `dist` 目录。
 
 ### 预览生产版本
 
-\`\`\`bash
+```bash
 npm run preview
-\`\`\`
+```
 
 ## 使用说明
 
@@ -88,7 +88,7 @@ npm run preview
 
 ## 项目结构
 
-\`\`\`
+```
 md2doc/
 ├── public/                      # 静态资源
 ├── src/
@@ -108,7 +108,7 @@ md2doc/
 ├── package.json                 # 项目配置
 ├── vite.config.js               # Vite 配置
 └── README.md                    # 项目说明
-\`\`\`
+```
 
 ## 浏览器兼容性
 
