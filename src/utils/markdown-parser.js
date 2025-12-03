@@ -136,8 +136,22 @@ const defaultListItemOpen = md.renderer.rules.list_item_open || function(tokens,
 };
 
 md.renderer.rules.list_item_open = function(tokens, idx, options, env, self) {
-  tokens[idx].attrSet('style', 'margin: 6pt 0;');
+  tokens[idx].attrSet('style', 'margin: 6pt 0; line-height: 1.5;');
   return defaultListItemOpen(tokens, idx, options, env, self);
+};
+
+// 自定义渲染规则 - strong 标签
+const defaultStrongOpen = md.renderer.rules.strong_open || function(tokens, idx, options, env, self) {
+  return self.renderToken(tokens, idx, options);
+};
+
+md.renderer.rules.strong_open = function(tokens, idx, options, env, self) {
+  // 检查 strong 标签后面是否紧跟列表
+  const nextToken = tokens[idx + 2]; // idx+1 是 strong_close，idx+2 是下一个元素
+  if (nextToken && (nextToken.type === 'bullet_list_open' || nextToken.type === 'ordered_list_open')) {
+    tokens[idx].attrSet('style', 'display: block; margin-bottom: 6pt;');
+  }
+  return defaultStrongOpen(tokens, idx, options, env, self);
 };
 
 // 自定义渲染规则 - 引用块
