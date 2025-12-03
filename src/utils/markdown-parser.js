@@ -140,34 +140,25 @@ md.renderer.rules.list_item_open = function(tokens, idx, options, env, self) {
   return defaultListItemOpen(tokens, idx, options, env, self);
 };
 
-// 自定义渲染规则 - inline 内容（用于处理包含 strong 标签后紧跟列表的情况）
-const defaultInline = md.renderer.rules.inline || function(tokens, idx, options, env, self) {
+// 自定义渲染规则 - strong 关闭标签（用于处理 strong 标签后紧跟列表的情况）
+const defaultStrongClose = md.renderer.rules.strong_close || function(tokens, idx, options, env, self) {
   return self.renderToken(tokens, idx, options);
 };
 
-md.renderer.rules.inline = function(tokens, idx, options, env, self) {
-  const token = tokens[idx];
+md.renderer.rules.strong_close = function(tokens, idx, options, env, self) {
+  // 获取父级 token 的索引（需要从渲染上下文中获取）
+  // 由于无法直接访问父级 tokens，我们需要另一种方法
 
-  // 检查 inline 后面是否紧跟列表
-  const nextToken = tokens[idx + 2]; // idx+1 是 paragraph_close (hidden)
-  if (nextToken && (nextToken.type === 'bullet_list_open' || nextToken.type === 'ordered_list_open')) {
-    // 检查 inline 内容是否包含 strong 标签
-    if (token.children && token.children.some(child => child.type === 'strong_open')) {
-      // 渲染 inline 内容
-      let result = '';
-      token.children.forEach(child => {
-        result += self.renderToken([child], 0, options, env, self);
-        if (child.content) {
-          result += child.content;
-        }
-      });
-      // 在 inline 内容后添加换行
-      return result + '<br style="line-height: 1.5;">\n';
-    }
+  // 检查 strong_close 后面是否只有空文本，然后是列表
+  const nextToken = tokens[idx + 1];
+  const isLastInInline = !nextToken || nextToken.type === 'text' && !nextToken.content.trim();
+
+  if (isLastInInline) {
+    // 在 strong 标签后添加换行
+    return '</strong><br style="line-height: 1.5;">\n';
   }
 
-  // 默认渲染
-  return self.renderInline(token.children, options, env);
+  return defaultStrongClose(tokens, idx, options, env, self);
 };
 
 // 自定义渲染规则 - 引用块
