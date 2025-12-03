@@ -140,27 +140,34 @@ md.renderer.rules.list_item_open = function(tokens, idx, options, env, self) {
   return defaultListItemOpen(tokens, idx, options, env, self);
 };
 
-// 自定义渲染规则 - 段落关闭标签（用于处理段落后紧跟列表的情况）
-const defaultParagraphClose = md.renderer.rules.paragraph_close || function(tokens, idx, options, env, self) {
+// 自定义渲染规则 - inline 内容（用于处理包含 strong 标签后紧跟列表的情况）
+const defaultInline = md.renderer.rules.inline || function(tokens, idx, options, env, self) {
   return self.renderToken(tokens, idx, options);
 };
 
-md.renderer.rules.paragraph_close = function(tokens, idx, options, env, self) {
-  // 检查段落后面是否紧跟列表
-  const nextToken = tokens[idx + 1];
+md.renderer.rules.inline = function(tokens, idx, options, env, self) {
+  const token = tokens[idx];
+
+  // 检查 inline 后面是否紧跟列表
+  const nextToken = tokens[idx + 2]; // idx+1 是 paragraph_close (hidden)
   if (nextToken && (nextToken.type === 'bullet_list_open' || nextToken.type === 'ordered_list_open')) {
-    // 检查段落内容是否包含 strong 标签
-    const paragraphOpen = tokens[idx - 2];
-    const inline = tokens[idx - 1];
-    if (inline && inline.type === 'inline' && inline.children) {
-      const hasStrong = inline.children.some(child => child.type === 'strong_open');
-      if (hasStrong) {
-        // 在段落关闭标签后添加一个换行
-        return '</p><div style="height: 6pt;"></div>\n';
-      }
+    // 检查 inline 内容是否包含 strong 标签
+    if (token.children && token.children.some(child => child.type === 'strong_open')) {
+      // 渲染 inline 内容
+      let result = '';
+      token.children.forEach(child => {
+        result += self.renderToken([child], 0, options, env, self);
+        if (child.content) {
+          result += child.content;
+        }
+      });
+      // 在 inline 内容后添加换行
+      return result + '<br style="line-height: 1.5;">\n';
     }
   }
-  return defaultParagraphClose(tokens, idx, options, env, self);
+
+  // 默认渲染
+  return self.renderInline(token.children, options, env);
 };
 
 // 自定义渲染规则 - 引用块
