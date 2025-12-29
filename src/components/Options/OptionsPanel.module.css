@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  align-items: center;
+  padding: 8px 20px;
+  background: #fff;
+  border-bottom: 1px solid #dee2e6;
+  gap: 20px;
+  flex-shrink: 0;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.option input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.label {
+  font-size: 14px;
+  color: #495057;
+}

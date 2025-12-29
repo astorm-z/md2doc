@@ -6,13 +6,13 @@ import '../../assets/styles/word-theme.css';
 import 'katex/dist/katex.min.css';
 import 'highlight.js/styles/github.css';
 
-function RichTextPreview({ markdown }) {
+function RichTextPreview({ markdown, options = {} }) {
   const [copyStatus, setCopyStatus] = useState('idle'); // idle, copying, success, error
   const previewRef = useRef(null);
 
   const htmlContent = useMemo(() => {
-    return parseMarkdown(markdown);
-  }, [markdown]);
+    return parseMarkdown(markdown, options);
+  }, [markdown, options]);
 
   const handleCopy = async () => {
     if (!previewRef.current || copyStatus === 'copying') {

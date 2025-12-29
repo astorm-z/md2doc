@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import SplitPane from './components/Layout/SplitPane';
 import MarkdownEditor from './components/Editor/MarkdownEditor';
 import RichTextPreview from './components/Preview/RichTextPreview';
+import OptionsPanel from './components/Options/OptionsPanel';
 import './assets/styles/global.css';
 
 // 默认示例 Markdown
@@ -82,16 +83,31 @@ $$
 祝您使用愉快！
 `;
 
+// 默认配置
+const DEFAULT_OPTIONS = {
+  addSpaceBeforeFirstLevelList: true, // 是否在一级列表的文字前加一个空格
+};
+
 function App() {
   const [markdown, setMarkdown] = useState('');
+  const [options, setOptions] = useState(DEFAULT_OPTIONS);
 
-  // 从 localStorage 加载保存的内容
+  // 从 localStorage 加载保存的内容和配置
   useEffect(() => {
     const saved = localStorage.getItem('markdown-content');
     if (saved) {
       setMarkdown(saved);
     } else {
       setMarkdown(DEFAULT_MARKDOWN);
+    }
+
+    const savedOptions = localStorage.getItem('md2doc-options');
+    if (savedOptions) {
+      try {
+        setOptions({ ...DEFAULT_OPTIONS, ...JSON.parse(savedOptions) });
+      } catch (e) {
+        // 解析失败时使用默认配置
+      }
     }
   }, []);
 
@@ -110,11 +126,21 @@ function App() {
     setMarkdown(value);
   }, []);
 
+  const handleOptionsChange = useCallback((newOptions) => {
+    setOptions(newOptions);
+    localStorage.setItem('md2doc-options', JSON.stringify(newOptions));
+  }, []);
+
   return (
-    <SplitPane
-      left={<MarkdownEditor value={markdown} onChange={handleMarkdownChange} />}
-      right={<RichTextPreview markdown={markdown} />}
-    />
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <OptionsPanel options={options} onChange={handleOptionsChange} />
+      <div style={{ flex: 1, overflow: 'hidden' }}>
+        <SplitPane
+          left={<MarkdownEditor value={markdown} onChange={handleMarkdownChange} />}
+          right={<RichTextPreview markdown={markdown} options={options} />}
+        />
+      </div>
+    </div>
   );
 }
 

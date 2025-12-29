@@ -183,15 +183,32 @@ md.renderer.rules.hr = function(tokens, idx, options, env, self) {
 /**
  * 解析 Markdown 文本为 HTML
  * @param {string} markdown - Markdown 文本
+ * @param {Object} options - 配置选项
+ * @param {boolean} options.addSpaceBeforeFirstLevelList - 是否在一级列表的文字前加空格
  * @returns {string} HTML 字符串
  */
-export function parseMarkdown(markdown) {
+export function parseMarkdown(markdown, options = {}) {
   if (!markdown || typeof markdown !== 'string') {
     return '';
   }
 
   try {
-    return md.render(markdown);
+    let html = md.render(markdown);
+
+    // 如果配置了在一级列表文字前加空格
+    if (options.addSpaceBeforeFirstLevelList) {
+      // 匹配一级列表项（ul > li 或 ol > li 的直接子元素中的文本）
+      // 在 <li> 标签后的第一个文本内容前加空格
+      // 注意：<li> 和 <p> 之间可能有换行符
+      html = html.replace(/(<li[^>]*>)(\s*<p[^>]*>)?/g, (match, liTag, pWithWhitespace) => {
+        if (pWithWhitespace) {
+          return liTag + pWithWhitespace + ' ';
+        }
+        return liTag + ' ';
+      });
+    }
+
+    return html;
   } catch (error) {
     console.error('Markdown 解析错误:', error);
     return `<p style="color: red;">解析错误: ${error.message}</p>`;
