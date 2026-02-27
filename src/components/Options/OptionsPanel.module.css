@@ -26,3 +26,21 @@
   font-size: 14px;
   color: #495057;
 }
+
+.textInput {
+  padding: 4px 8px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 14px;
+  min-width: 300px;
+  outline: none;
+}
+
+.textInput:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.textInput::placeholder {
+  color: #adb5bd;
+}

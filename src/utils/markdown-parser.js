@@ -185,6 +185,7 @@ md.renderer.rules.hr = function(tokens, idx, options, env, self) {
  * @param {string} markdown - Markdown 文本
  * @param {Object} options - 配置选项
  * @param {boolean} options.addSpaceBeforeFirstLevelList - 是否在一级列表的文字前加空格
+ * @param {string} options.imageBaseUrl - 图片基础 URL，用于补全相对路径
  * @returns {string} HTML 字符串
  */
 export function parseMarkdown(markdown, options = {}) {
@@ -193,7 +194,26 @@ export function parseMarkdown(markdown, options = {}) {
   }
 
   try {
-    let html = md.render(markdown);
+    // 如果提供了图片基础 URL，预处理 markdown 中的图片链接
+    let processedMarkdown = markdown;
+    if (options.imageBaseUrl) {
+      const baseUrl = options.imageBaseUrl.trim();
+      if (baseUrl) {
+        // 匹配 markdown 图片语法：![alt](url)
+        processedMarkdown = markdown.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (match, alt, url) => {
+          // 检查是否是相对路径（不以 http:// 或 https:// 或 / 开头）
+          if (!/^(https?:)?\/\//i.test(url)) {
+            // 确保 baseUrl 和 url 之间有正确的斜杠
+            const separator = baseUrl.endsWith('/') || url.startsWith('/') ? '' : '/';
+            const fullUrl = baseUrl + separator + url;
+            return `![${alt}](${fullUrl})`;
+          }
+          return match;
+        });
+      }
+    }
+
+    let html = md.render(processedMarkdown);
 
     // 如果配置了在一级列表文字前加空格
     if (options.addSpaceBeforeFirstLevelList) {

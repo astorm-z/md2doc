@@ -86,6 +86,7 @@ $$
 // 默认配置
 const DEFAULT_OPTIONS = {
   addSpaceBeforeFirstLevelList: true, // 是否在一级列表的文字前加一个空格
+  imageBaseUrl: '', // 图片基础 URL，用于补全相对路径
 };
 
 function App() {
