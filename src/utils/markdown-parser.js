@@ -40,7 +40,7 @@ const defaultHeadingOpen = md.renderer.rules.heading_open || function(tokens, id
 md.renderer.rules.heading_open = function(tokens, idx, options, env, self) {
   const level = tokens[idx].tag;
   const styles = {
-    h1: 'font-size: 22pt; font-weight: bold; margin: 24pt 0 12pt 0; text-align: center; text-indent: 0;',
+    h1: 'font-size: 22pt; font-weight: bold; margin: 24pt 0 12pt 0; text-align: left; text-indent: 0;',
     h2: 'font-size: 18pt; font-weight: bold; margin: 18pt 0 10pt 0; text-indent: 0;',
     h3: 'font-size: 16pt; font-weight: bold; margin: 14pt 0 8pt 0; text-indent: 0;',
     h4: 'font-size: 14pt; font-weight: bold; margin: 12pt 0 6pt 0; text-indent: 0;',
